@@ -1,0 +1,137 @@
+[Lecture 4: Classification]
+
+- Uniformity-based rule condition
+- How to measure information uniformity
+    1) information gain
+        ..entropy concept
+        Information gain index = 1-entropy index
+    2) Gini coefficient: inequality index
+        The lower the Gini coefficient, the more uniform the data.
+
+- Process of decision tree
+    If true/ else
+
+- Advantages of decision trees
+    easy and intuitive
+
+- Disadvantages of Decision Tree 
+    overfitting
+    sol) limiting the tree size in advance
+
+- Decision tree's major hyperparameters
+    - max_depth, max_features..
+    
+- Visualization of the decision tree model using Graphviz (as an actual tree shape picture)
+    - at each node
+        Rule condition for feature
+        gini
+        samples: the number of data cases corresponding to the current rule
+        value: the number of data cases based on class value
+                ex) If [41,4,10], there are 41 a and 4 b satisfying the conditions.
+        class: value The decision value with the largest number of cases in the list
+
+- The importance of feature selection in the decision tree
+    It may be better to select only important features to learn and predict
+    -feature_importance: finding the important features
+
+- Decision Tree Practice: 'User Behavior Recognition Data Set'
+    * Find out what you are doing with your smart watch
+            
+
+- Ensemble learning
+    Combining the prediction results of various classifiers
+    Mixing disparate models can benefit overall performance.
+
+    1. Voting
+        Hard voting: majority vote between multiple classifiers
+        Soft Voting: Determining Probability by Class by predict_proba()
+
+        * Wisconsin Breast Cancer Data Prediction
+        (cf) In kNeighborsClassifier, n_neighbors refers to how many neighbors around me to predict this data.
+
+
+    2. Bagging| Random Forest is typical
+        Multiple decision tree classifiers perform individual learning by sampling each data from the entire data in a bagging method
+        -> then, determine the prediction by voting for all classifiers 
+        Relatively fast execution speed
+
+        bootstrapping: Separating the entire data set into overlapping
+            One subset contains multiple pieces of data, such as [1233346889]
+
+        * Predict user behavior cognitive data
+            (cf) Visualization of importance of individual features
+                feature_importances_ of random forest: returned as ndarray in order of importance
+                -> return into series
+    3. Boosting
+        Learning and predicting multiple learners “sequentially”, while weighting “mispredicted data” to improve errors
+                            -> Long execution time
+    
+    - GBM (Gradient Boost Machine)
+        Gradient descent is used to update weights.
+        'GradientBoostingClassifier' class
+
+        learning_rate: the learning rate applied during GBM learning
+        n_estimators: the number of weak learners
+        subsample: The data sampling rate used by the weak learner for training
+
+
+    - XGBoost (extra gradient boost)
+        fast execution time
+        Various performance enhancement functions: regulation, tree pruning
+        Various convenience functions: early stop, self-built cross-validation, self-handling of missing values
+
+        - Early stop function
+            When the cost function no longer decreases, the execution is terminated.
+            early_stopping_rounds (maximum number of iterations at which the CPI is no longer decreasing), eval_metric, eval_set
+
+    - LightGBM
+        Faster and uses less memory
+        Automatic conversion of categorical features, optimal segmentation
+
+        Leaf central tree split method (leaf wise(<-> balanced tree split method))
+
+
+- * Classification Practice 1: Prediction of Customer Satisfaction in Santander Bank of Kaggle Contest
+
+- * Classification Practice 2: Credit Card Fraud Prediction Practice
+
+    - IQR and boxplot
+
+    - Undersampling, oversampling
+        Undersampling: data sets with many labels
+                    Reducing sampling to the level of datasets with fewer labels
+    - SMOTE
+        Original data -> New data propagation to k nearest neighbors -> Oversampling completed by new propagation
+
+    - SUM
+        Data log transformation: slightly better performance
+        Outlier data removal: precision up, recall up
+        SMOTE oversampling: precision down, recall up
+
+- Stacking Model
+    By making the values predicted by the base models in a stacking form,
+    A model that meta-modals learn and predict
+
+- Stacking based on cross-validation sets
+    Step1: Learn for each base model, and based on the predicted learning/test data
+            Generate training/test data for meta-model
+    step2: in step1
+
+(new)
+
+- Feature Selection
+    Select the main features that make up the model
+    Eliminates the possibility of degrading model performance due to a large number of unnecessary features
+    Select features to be an explainable model
+
+    Consider distribution of feature values, number of nulls, high correlation between features (removing overlapping), independence from decision values, etc.
+    Based on feature importance in the model
+
+    - Support for scikit-learn's Feature Selection
+        - RFE
+            Selection of feature importance after initial training of the model
+            Attributes with low feature importance are removed one after another and repeatedly learning and evaluation are performed.
+                Optimal feature extraction
+            Execution time is too long
+        - SelectFromModel
+            After the initial model training, select features that are greater than or equal to a certain ratio of the mean/median according to the selected feature importance.
